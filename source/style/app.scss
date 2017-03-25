@@ -1,0 +1,78 @@
+// ------------------------------------------
+// Utils
+//-------------------------------------------
+
+@import 'utils/variables';
+@import 'utils/mixins';
+@import 'utils/placeholders';
+@import 'utils/functions';
+
+
+// ------------------------------------------
+// Base
+//-------------------------------------------
+
+@import 'base/reset';
+@import 'base/base';
+@import 'base/fonts';
+
+
+// ------------------------------------------
+// Layout
+// ------------------------------------------
+
+@import 'layout/tools';
+@import 'layout/grid';
+
+
+// ------------------------------------------
+// Common
+// ------------------------------------------
+
+@import 'common/divider';
+
+$app: 'mg';
+
+.#{$app}-app {
+  width: 400px;
+  height: 600px;
+  margin: 20px;
+}
+
+.#{$app}-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.#{$app}-header {
+  height: 50px;
+  background: rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.#{$app}-history {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.#{$app}-panel {
+  padding: 20px;
+  flex-shrink: 0;
+  background: rgba(0, 0, 0, 0.2);
+
+  &_textarea {
+    width: 100%;
+    height: 100px;
+  }
+
+  &_send {}
+}
+
+
+.item {
+  height: 100px;
+  background: rgba(0, 0, 0, 0.1);
+  margin: 20px;
+}
