@@ -8,6 +8,7 @@ module.exports = [
   './gulp/tasks/clean.js',
   './gulp/tasks/js.lint.js',
   './gulp/tasks/copy.fonts.js',
+  './gulp/tasks/copy.images.js',
   './gulp/tasks/sprite.svg.js',
   './gulp/tasks/webpack.app.js',
   './gulp/tasks/webpack.dll.js'

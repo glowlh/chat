@@ -3,22 +3,24 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const modulesDirectories = [`${__dirname}/node_modules`];
-const input = path.join(__dirname, './source/js/');
-const output = path.join(__dirname, $.config.output, '/assets/js');
+const modules = [`${__dirname}/node_modules`];
+const input = path.join(__dirname, './source/app/');
+const output = path.join(__dirname, $.config.output, '/assets/app');
 
-const loaders = [
-
-  { test: /\.json$/, loader: 'json' },
+const rules = [
 
   {
-    test: /\.jsx?$/,
+    test: /\.js?$/,
     include: input,
-    loader: 'babel',
+    loader: 'babel-loader',
     query: {
-      presets: ['es2015', 'react'],
+      presets: ['es2015'],
       plugins: ['transform-runtime']
     }
+  },
+  {
+    test: /\.pug$/,
+    loader: 'pug-loader'
   }
 ];
 
@@ -44,27 +46,21 @@ const config = {
   devtool: $.dev ? 'inline-source-map' : undefined,
 
   module: {
-    loaders
+    rules
   },
 
   resolve: {
-    modulesDirectories,
-    extensions: ['', '.js', '.jsx'],
+    modules,
+    extensions: ['.js']
   },
 
   resolveLoader: {
-    modulesDirectories,
-    moduleTemplates: ['*-loader', '*'],
-    extensions: ['', '.js']
+    modules,
+    extensions: ['.js']
   },
 
   plugins: [
-    new webpack.DllReferencePlugin({
-      context: process.cwd(),
-      manifest: require(`${$.config.temp}/foundation-manifest.json`)
-    }),
-
-    new webpack.NoErrorsPlugin(),
+    new webpack.NoEmitOnErrorsPlugin(),
 
     new webpack.DefinePlugin({ NODE_ENV: JSON.stringify($.dev ? '__DEV__' : '__PROD__') }),
   ]
@@ -73,7 +69,6 @@ const config = {
 if (!$.dev) {
   config.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
-      warnings: false,
       drop_console: true
     })
   );

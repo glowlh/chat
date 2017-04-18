@@ -6,7 +6,4 @@
  * @type {String[]}
  */
 
-module.exports = [
-  'react',
-  'react-dom'
-];
+module.exports = [];

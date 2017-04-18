@@ -1,0 +1,15 @@
+.#{$app}-label {
+  padding: 5px 10px;
+  color: $color-text-white;
+  display: inline-flex;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.#{$app}-label--theme--mint {
+  background: $color-mint;
+}
+
+.#{$app}-label--theme--sand {
+  background: $color-sand;
+}

@@ -25,16 +25,17 @@ global.$ = {
 
 // TASKS
 // - - - - - - - - - - - - - - -
-$.path.tasks.forEach(taskPath =>  require(taskPath)());
+$.path.tasks.forEach(taskPath => require(taskPath)());
 
 $.gulp.task('default', $.gulp.series(
   'clean',
-  'webpack:dll',
+  // 'webpack:dll',
   $.gulp.parallel(
     'sass',
     'pug',
     'webpack:app',
     'copy:fonts',
+    'copy:images',
     'sprite:svg'
   ),
   $.gulp.parallel(

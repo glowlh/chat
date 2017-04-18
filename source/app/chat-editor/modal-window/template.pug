@@ -1,0 +1,15 @@
+mixin icon(name, mods, title)
+  - mods = mods || ''
+  svg(class="icon icon-" + name class=mods)
+    if (title)
+      title.icon__title=title
+    use(xlink:href="/assets/sprite/sprite.svg#" + name)
+
+.mg-modal-window
+  .mg-box.mg-modal-window__box
+    .mg-modal-window__closer.mg-button.mg-closer(data-chat-editor='close')
+      +icon('close', ['icon-10', 'icon-dark'], 'close')
+    h2.mg-title-h2.mg-modal-window__title-h2 Chat creation
+    form.mg-form.mg-modal-window__form(action='/' name='form-new-chat')
+      input.mg-modal-window__input-text.mg-input-text(type='text' placeholder='Type chat title...')
+      input.mg-input-submit.mg-label.mg-label--theme--mint(type='submit' value='Create' disabled='disabled' data-chat-editor='create')

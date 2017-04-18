@@ -1,0 +1,19 @@
+.#{$app}-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  .icon {
+    transition: 0.4s;
+  }
+}
+
+.#{$app}-button--type--send {
+  height: 30px;
+  width: 30px;
+
+  .icon:hover {
+    fill: rgba(#fff, 0.5);
+  }
+}

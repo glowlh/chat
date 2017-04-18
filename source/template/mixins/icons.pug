@@ -5,7 +5,9 @@
   @example
   +icon('mail', ['icon-20', 'icon-light'])
 
-mixin icon(name, mods)
+mixin icon(name, mods, title)
   - mods = mods || ''
   svg(class="icon icon-" + name class=mods)
+    if (title)
+      title.icon__title=title
     use(xlink:href="/assets/sprite/sprite.svg#" + name)
