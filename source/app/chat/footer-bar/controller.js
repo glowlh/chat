@@ -8,12 +8,13 @@ class FooterBar {
   /**
    * @param {HTMLElement} element - parent node for editor block
    */
-  constructor(element) {
+  constructor(element, id) {
     if (!(element instanceof HTMLElement)) {
       throw new TypeError(`${element} is not an HTMLElement`);
     }
 
     this.rootEl = element;
+    this.id = id;
     this.message = {};
     this.invokeApi = invokeApi;
     this.textarea = this.rootEl.querySelector(SELECTOR_TEXTAREA);
@@ -75,7 +76,7 @@ class FooterBar {
       return;
     }
 
-    this.invokeApi.sendMessage(this.content);
+    this.invokeApi.sendMessage(this.content, this.id);
   }
 }
 

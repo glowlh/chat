@@ -1,40 +1,19 @@
-/*
+import router from './router/router';
+import State from './router/state';
+import chatList from './chat.list/controller';
 
- - rename source/js -> app
- - move source/app/components/chat/** -> source/app
- - rename component app -> main
- - move components to own folders
+import templateChatListFn from './router/templates/chat-list.pug';
+import templateChatFn from './router/templates/chat.pug';
 
- - eslint (https://docs.npmjs.com/misc/scripts)
- */
+if (document.querySelector('.mg-app')) {
+  const chatListTemplate = templateChatListFn();
+  const chatTemplate = templateChatFn();
+  const chatListState = new State('chat-list', chatListTemplate);
+  const chatState = new State('chat', chatTemplate);
 
-/*
+  router.setState(chatState);
+  router.setState(chatListState);
+  router.go('chat-list');
 
- extract class
- Message
- get id => this.spec.id
- .spec = {text,id,date}
- .element = {HTMLElement}
-
- message
- message.js
- template.pug
- */
-
-/*
-
- Создание своих чатов
- Переход на страницу определённого чата
- */
-
-import Chat from './chat/main/main';
-import ChatEditor from './chat-editor/main/main';
-
-if (document.querySelector('.mg-app--page--chat-editor')) {
-  // const element = document.querySelector('.mg-app--page--chat');
-  // const chat = new Chat(element);
-  // chat.open();
-
-  const element = document.querySelector('.mg-app--page--chat-editor');
-  const chatEditor = new ChatEditor(element);
+  chatList.init();
 }

@@ -68,7 +68,7 @@ class Message {
     } else if (year < currentYear) {
       dayTitle = `${day} ${monthTitle} ${year}`;
     } else {
-      dayTitle = `${day} ${monthTitle}`
+      dayTitle = `${day} ${monthTitle}`;
     }
 
     return `${hours}:${minutes}, ${dayTitle}`;

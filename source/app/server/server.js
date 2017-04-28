@@ -1,6 +1,6 @@
 const LOCAL_STORAGE_ITEM_NAME = 'chats';
-const MESSAGE_PREFIX_ID_NAME = 'message';
-const CHAT_PREFIX_ID_NAME = 'chat';
+const ID_NAME_MESSAGE_PREFIX = 'message';
+const ID_NAME_CHAT_PREFIX = 'chat';
 
 class Server {
 
@@ -16,7 +16,7 @@ class Server {
     document.addEventListener('server.messages.delete', this.onDeleteMessages.bind(this), false);
     document.addEventListener('server.message.send', this.onSendMessage.bind(this), false);
     document.addEventListener('server.chat.create', this.onCreateChat.bind(this), false);
-    document.addEventListener('server.chats.get', this.onGetChats.bind(this), false)
+    document.addEventListener('server.chats.get', this.onGetChats.bind(this), false);
   }
 
   /**
@@ -43,10 +43,11 @@ class Server {
   /**
    * Handles getting messages
    */
-  onGetMessages() {
+  onGetMessages(e) {
     const event = new Event('api.messages.get');
+    const id = e.data;
 
-    event.data = this.getMessages();
+    event.data = this.getMessages(id);
     document.dispatchEvent(event);
   }
 
@@ -55,12 +56,12 @@ class Server {
    * @param {Object} e - event object
    */
   onDeleteMessages(e) {
-    const ids = e.data;
+    const ids = e.data.ids;
+    const chatId = e.data.chatId;
     const event = new Event('api.messages.delete');
 
     document.dispatchEvent(event);
-
-    this.deleteMessages(ids);
+    this.deleteMessages(ids, chatId);
   }
 
   /**
@@ -68,10 +69,11 @@ class Server {
    * @param {Object} e - event object
    */
   onSendMessage(e) {
-    const message = e.data;
+    const message = e.data.message;
+    const chatId = e.data.chatId;
     const event = new Event('api.message.send');
 
-    this.sendMessage(message);
+    this.sendMessage(message, chatId);
     document.dispatchEvent(event);
   }
 
@@ -82,7 +84,7 @@ class Server {
   createChat(title) {
     const totalChats = this.restoreChats() || [];
     const chatsSize = totalChats.length;
-    const id = `${CHAT_PREFIX_ID_NAME}-${chatsSize}`;
+    const id = `${ID_NAME_CHAT_PREFIX}-${chatsSize}`;
     const data = {
       id,
       title
@@ -92,10 +94,13 @@ class Server {
     this.createNewChatEvent(data);
   }
 
+  /**
+   * Gets chats
+   * @returns {Array}
+   */
   getChats() {
     let totalChats = this.restoreChats();
-    let chats = [];
-    chats = totalChats.map((it) => {
+    let chats = totalChats.map((it) => {
       return {
         id: it.id,
         title: it.title
@@ -109,8 +114,8 @@ class Server {
    * Gets messages from storage
    * @returns {Array<Object>}
    */
-  getMessages() {
-    let totalMessages = this.restoreMessages();
+  getMessages(id) {
+    let totalMessages = this.restoreMessages(id);
 
     return totalMessages;
   }
@@ -118,9 +123,10 @@ class Server {
   /**
    * Deletes messages from storage
    * @param {Array} ids - ids messages
+   * @param {String} chatId
    */
-  deleteMessages(ids) {
-    let totalMessages = this.restoreMessages();
+  deleteMessages(ids, chatId) {
+    let totalMessages = this.restoreMessages(chatId);
 
     const updatedMessages = totalMessages.filter((item) => {
       return !ids.some((id) => {
@@ -128,8 +134,7 @@ class Server {
       });
     });
 
-    const parsedMessage = JSON.stringify(updatedMessages);
-    this.storeMessage(parsedMessage);
+    this.storeMessages(chatId, updatedMessages);
 
     this.createDeletingEvent(ids);
   }
@@ -137,23 +142,21 @@ class Server {
   /**
    * Sends message
    * @param {Object} message - sending message
+   * @param {String} chatId
    */
-  sendMessage(message) {
-    const totalMessages = this.restoreMessages() || [];
+  sendMessage(message, chatId) {
+    let totalMessages = this.restoreMessages(chatId);
     const messagesSize = totalMessages.length;
-    const id = `${MESSAGE_PREFIX_ID_NAME}-${messagesSize}`;
+    const id = `${ID_NAME_MESSAGE_PREFIX}-${messagesSize}`;
     const date = new Date();
     const data = {
       id,
       message,
       date
     };
-
     totalMessages.push(data);
 
-    const parsedMessage = JSON.stringify(totalMessages);
-    this.storeMessage(parsedMessage);
-
+    this.storeMessages(chatId, totalMessages);
     this.createNewMessageEvent(data);
   }
 
@@ -167,7 +170,7 @@ class Server {
 
     document.dispatchEvent(event);
   }
-
+  
   /**
    * Creates event for sending new message
    * @param {Object} data - message data
@@ -193,13 +196,13 @@ class Server {
   /**
    * Stores message in the local storage
    * @param {String} chatId
-   * @param {Object} message - storing message
+   * @param {Array<Object>} messages - storing message
    */
-  storeMessage(chatId, message) {
+  storeMessages(chatId, messages) {
     const chats = this.restoreChats();
     chats.forEach((it) => {
       if (it.id === chatId) {
-        it.messages.push(message)
+        it.messages = messages;
       }
     });
     const chatsJSON = JSON.stringify(chats);
@@ -216,7 +219,7 @@ class Server {
     let messages = [];
 
     chats.forEach((it) => {
-      if (it.id === chatId) {
+      if (it.id === chatId && it.messages) {
         messages = it.messages;
       }
     });
@@ -224,14 +227,23 @@ class Server {
     return messages;
   }
 
+  /**
+   * Stores chat options in localStorage
+   * @param {Object} chat
+   */
   storeChat(chat) {
     let chats = this.restoreChats();
+    chat.messages = [];
     chats.push(chat);
     const chatsJSON = JSON.stringify(chats);
 
     localStorage.setItem(LOCAL_STORAGE_ITEM_NAME, chatsJSON);
   }
 
+  /**
+   * Gets chats options from localStorage
+   * @returns {Array}
+   */
   restoreChats() {
     const chats = localStorage.getItem(LOCAL_STORAGE_ITEM_NAME);
 

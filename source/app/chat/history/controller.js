@@ -1,7 +1,7 @@
 import invokeApi from '../../invoke-api/invoke-api';
-import HeaderBar from '../header-bar/header-bar';
+import HeaderBar from '../header-bar/controller';
 import SelectedMessages from './history.selected-messages';
-import Message from '../message/message';
+import Message from '../message/controller';
 
 const DATA_MESSAGE_ATTR = 'messageId';
 const SELECTOR_MESSAGE = '.mg-message';
@@ -11,22 +11,25 @@ class History {
 
   /**
    * @param {HTMLElement} element - parent node for history block
+   * @param {String} id
    */
-  constructor(element) {
+  constructor(element, id) {
     if (!(element instanceof HTMLElement)) {
       throw new TypeError(`${element} is not an HTMLElement`);
     }
 
     this.rootEl = element;
+    this.id = id;
 
     const header = document.querySelector(SELECTOR_HEADER);
-    this.headerBar = new HeaderBar(header);
+    this.headerBar = new HeaderBar(header, this.id);
     this.selectedMessages = new SelectedMessages();
 
     this.invokeApi = invokeApi;
     this.messages = new Map();
 
     this._attachListener();
+    this._loadMessages();
   }
 
   /**
@@ -68,16 +71,15 @@ class History {
    */
   _attachListener() {
     this.rootEl.addEventListener('click', this._toggleSelectedHandler.bind(this), false);
-    document.addEventListener('message.new', this._addMessageHandler.bind(this));
+    document.addEventListener('message.new', this._onAddMessage.bind(this));
     document.addEventListener('messages.delete', this._onRemoveMessages.bind(this));
-    window.addEventListener('load', this._loadMessagesHandler.bind(this));
   }
 
   /**
    * Attaches handler for sending messages
    * @param {Object} event
    */
-  _addMessageHandler(event) {
+  _onAddMessage(event) {
     this.add(event.data);
   }
 
@@ -85,8 +87,8 @@ class History {
    * Attaches handler for loading messages to the history
    * @private
    */
-  _loadMessagesHandler() {
-    this.invokeApi.getMessages()
+  _loadMessages() {
+    this.invokeApi.getMessages(this.id)
       .then((response) => {
         response.forEach((message) => {
           message.date = new Date(message.date);

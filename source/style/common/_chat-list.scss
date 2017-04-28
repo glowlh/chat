@@ -1,0 +1,26 @@
+.#{$app}-chat-editor {
+  background-image: url('/assets/images/wallhaven-3.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+
+.#{$app}-chat-item {
+  padding: 15px 10px;
+  background: rgba($color-background-message, 0.4);
+}
+
+.#{$app}-chat-editor__chat-item {
+  margin: 20px;
+}
+
+.#{$app}-chat-item__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+

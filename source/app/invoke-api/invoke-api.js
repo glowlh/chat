@@ -37,9 +37,10 @@ class InvokeApi {
    * Attaches handlers for getting messages
    * @returns {Promise} promise
    */
-  getMessages() {
+  getMessages(id) {
     const promise = this._handler('api.messages.get');
     const event = new Event('server.messages.get');
+    event.data = id;
 
     document.dispatchEvent(event);
 
@@ -48,15 +49,19 @@ class InvokeApi {
 
   /**
    * Attaches handlers for deleting messages
-   * @param {Object} data - messages data
+   * @param {Array} ids - messages ids
+   * @param {String} chatId
    * @returns {Promise} promise
    *
    */
-  deleteMessages(data) {
+  deleteMessages(ids, chatId) {
     const promise = this._handler('api.messages.delete');
     const event = new Event('server.messages.delete');
 
-    event.data = data;
+    event.data = {
+      ids,
+      chatId
+    };
     document.dispatchEvent(event);
 
     return promise;
@@ -64,14 +69,18 @@ class InvokeApi {
 
   /**
    * Attaches handlers for sending messages
-   * @param {Object} data - message data
+   * @param {Object} message - message data
+   * @param {String} id
    * @returns {Promise} promise
    */
-  sendMessage(data) {
+  sendMessage(message, id) {
     const promise = this._handler('api.message.send');
     const event = new Event('server.message.send');
+    event.data = {
+      chatId: id,
+      message
+    };
 
-    event.data = data;
     document.dispatchEvent(event);
 
     return promise;

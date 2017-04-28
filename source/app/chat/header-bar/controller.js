@@ -1,19 +1,26 @@
-import templateNavigationFn from './template.pug';
+import templateFn from './template.pug';
 
 import invokeApi from '../../invoke-api/invoke-api';
+import router from '../../router/router';
+import chatList from '../../chat.list/controller';
 
 const DATA_BUTTON_NAVIGATION_ATTR = 'navigationType';
+const CLASS_MANAGE_ITEM = 'mg-header__manage';
+const CLASS_BUTTON_ITEM = 'mg-button';
 
 class HeaderBar {
 
-  constructor(root) {
+  constructor(root, id) {
     if (!(root instanceof HTMLElement)) {
       throw new TypeError(`${root} is not an HTMLElement`);
     }
 
     this.rootEl = root;
+    this.manageEl = this.rootEl.querySelector(`.${CLASS_MANAGE_ITEM}`);
+    this.id = id;
     this.invokeApi = invokeApi;
 
+    this._actionHandler = this._actionHandler.bind(this);
     this._attachListener();
   }
 
@@ -36,18 +43,18 @@ class HeaderBar {
    * @private
    */
   close() {
-    this.rootEl.innerHTML = '';
+    this.manageEl.innerHTML = '';
   }
 
   /**
-   * Open header bar
+   * Opens header bar
    */
   open() {
     const data = {
       count: this.selectedMessages.num
     };
 
-    this.rootEl.innerHTML = templateNavigationFn(data);
+    this.manageEl.innerHTML = templateFn(data);
   }
 
   /**
@@ -55,16 +62,28 @@ class HeaderBar {
    * @private
    */
   _attachListener() {
-    this.rootEl.addEventListener('click', this._actionHandler.bind(this), false);
+    this.rootEl.addEventListener('click', this._actionHandler, false);
   }
 
   /**
-   * Attaches handler for switching navigation block
+   * Clears event listeners handlers
+   * @private
+   */
+  _clearListener() {
+    this.rootEl.removeEventListener('click', this._actionHandler);
+  }
+
+  /**
+   * Handles action for chat page
    * @param {Object} event
    * @private
    */
   _actionHandler(event) {
-    const target = event.target;
+    const target = event.target.closest(`.${CLASS_BUTTON_ITEM}`);
+    if (!target) {
+      return;
+    }
+
     const actionType = target.dataset[DATA_BUTTON_NAVIGATION_ATTR];
 
     switch (actionType) {
@@ -74,12 +93,26 @@ class HeaderBar {
       case 'cancel':
         this._actionCancel();
         break;
+      case 'back':
+        this._actionBack();
+        break;
       default: break;
     }
   }
 
   /**
-   * Attaches action for deleting messages
+   * Closes active chat
+   * @private
+   */
+  _actionBack() {
+    this._clearListener();
+
+    router.go('chat-list');
+    chatList.attachListener();
+  }
+
+  /**
+   * Deletes selected messages
    * @private
    */
   _actionDelete() {
@@ -88,7 +121,7 @@ class HeaderBar {
   }
 
   /**
-   * Attaches action for canceling messages selecting
+   * Cancels selection from messages
    * @private
    */
   _actionCancel() {
@@ -97,12 +130,12 @@ class HeaderBar {
   }
 
   /**
-   * Attaches action for deleting selected messages
+   * Sends request to the server for deleting messages
    * @private
    */
   _deleteMessages() {
     const messageIds = this.selectedMessages.messageIds;
-    this.invokeApi.deleteMessages(messageIds);
+    this.invokeApi.deleteMessages(messageIds, this.id);
   }
 }
 
