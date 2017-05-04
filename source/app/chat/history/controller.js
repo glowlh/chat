@@ -4,8 +4,10 @@ import SelectedMessages from './history.selected-messages';
 import Message from '../message/controller';
 
 const DATA_MESSAGE_ATTR = 'messageId';
-const SELECTOR_MESSAGE = '.mg-message';
-const SELECTOR_HEADER = '.mg-header';
+const CLASS_MESSAGE = 'mg-message';
+const CLASS_HEADER = 'mg-header';
+const CLASS_ROOT = 'mg-history';
+
 
 class History {
 
@@ -18,12 +20,16 @@ class History {
       throw new TypeError(`${element} is not an HTMLElement`);
     }
 
-    this.rootEl = element;
+    this.rootEl = element.querySelector(`.${CLASS_ROOT}`);
     this.id = id;
 
-    const header = document.querySelector(SELECTOR_HEADER);
+    const header = element.querySelector(`.${CLASS_HEADER}`);
     this.headerBar = new HeaderBar(header, this.id);
     this.selectedMessages = new SelectedMessages();
+
+    this._toggleSelectedHandler = this._toggleSelectedHandler.bind(this);
+    this._onAddMessage = this._onAddMessage.bind(this);
+    this._onRemoveMessages = this._onRemoveMessages.bind(this);
 
     this.invokeApi = invokeApi;
     this.messages = new Map();
@@ -39,6 +45,39 @@ class History {
   add(data) {
     this._read(data);
     this._render(data.id);
+    this._scrollToBottom();
+  }
+
+  /**
+   * Destroys dependencies
+   */
+  destroy() {
+    this.rootEl.removeEventListener('click', this._toggleSelectedHandler);
+    document.removeEventListener('message.new', this._onAddMessage);
+    document.removeEventListener('messages.delete', this._onRemoveMessages);
+    this.headerBar.removeListener();
+    this.rootEl.innerHTML = '';
+  }
+
+  /**
+   * Attaches event listeners
+   * @private
+   */
+  _attachListener() {
+    this.rootEl.addEventListener('click', this._toggleSelectedHandler, false);
+    document.addEventListener('message.new', this._onAddMessage, false);
+    document.addEventListener('messages.delete', this._onRemoveMessages, false);
+  }
+
+  /**
+   * Attaches event listeners
+   * @private
+   */
+  _scrollToBottom() {
+    const scrollHeight = this.rootEl.scrollHeight;
+    const heigth = this.rootEl.clientHeight;
+
+    this.rootEl.scrollTop = scrollHeight - heigth;
   }
 
   /**
@@ -63,16 +102,6 @@ class History {
     const node = message.node;
 
     this.rootEl.appendChild(node);
-  }
-
-  /**
-   * Attaches event listeners
-   * @private
-   */
-  _attachListener() {
-    this.rootEl.addEventListener('click', this._toggleSelectedHandler.bind(this), false);
-    document.addEventListener('message.new', this._onAddMessage.bind(this));
-    document.addEventListener('messages.delete', this._onRemoveMessages.bind(this));
   }
 
   /**
@@ -121,7 +150,7 @@ class History {
    */
   _toggleSelectedHandler(event) {
     const target = event.target;
-    const messageNode = target.closest(SELECTOR_MESSAGE);
+    const messageNode = target.closest(`.${CLASS_MESSAGE}`);
 
     if (!messageNode) {
       return;

@@ -70,18 +70,10 @@ class ChatTitlePrompt {
   }
 
   /**
-   * Attaches handler for clicking close btn - cancels chat title creation
+   * Closes modal window
    * @private
    */
   _cancelHandler() {
-    this._actionClose();
-  }
-
-  /**
-   * Attaches action for closing modal window
-   * @private
-   */
-  _actionClose() {
     this.close();
     this._deferred.reject();
   }
@@ -94,7 +86,7 @@ class ChatTitlePrompt {
   _okHandler(event) {
     event.preventDefault();
 
-    const title =  this.inputField.value;
+    const title =  this.inputField.value.trim();
     this._deferred.resolve(title);
   }
 

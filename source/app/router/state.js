@@ -1,25 +1,35 @@
 class State {
 
-  constructor(name, templateFn) {
+  constructor(name, options) {
     if (typeof name !== 'string') {
       throw new TypeError(`${name} is not a String`);
     }
 
-    if (typeof templateFn !== 'string') {
-      throw new TypeError(`${templateFn} is not a String`);
+    if (!(options instanceof Object)) {
+      throw new TypeError(`${options} is not an Object`);
     }
 
     this.name = name;
-    this.templateFn = templateFn;
+    this.template = options.template;
+    this.Controller = options.controller;
     this._init();
   }
 
-  open() {
-    this.element.hidden = false;
+  /**
+   * Creates state instance
+   */
+  open(options) {
+    const id = options ? options.id : null;
+    this.instance = new this.Controller();
+    this.instance.init(this.element, id);
   }
 
+  /**
+   * Deletes state instance
+   */
   close() {
-    this.element.hidden = true;
+    this.instance.destroy();
+    delete this.instance;
   }
 
   /**
@@ -28,9 +38,8 @@ class State {
    */
   _init() {
     const node = document.createElement('div');
-    node.innerHTML = this.templateFn;
+    node.innerHTML = this.template;
     this.element = node.firstChild;
-    this.element.hidden = true;
   }
 }
 

@@ -1,2 +1,14 @@
-.mg-chat-editor__chat-item.mg-chat-item(data-chat-id=id)
-  .mg-chat-item__title=title
+mixin icon(name, mods, title)
+  - mods = mods || ''
+  svg(class="icon icon-" + name class=mods)
+    if (title)
+      title.icon__title=title
+    use(xlink:href="/assets/sprite/sprite.svg#" + name)
+
+.mg-app__chat-list.mg-page
+  .mg-chat-editor.mg-container
+    .mg-chat-editor__header.mg-header
+      button.mg-button.mg-button--type--new-chat
+        +icon('new-chat', ['icon-30', 'icon-light'], 'create chat')
+    .mg-chat-editor__history.mg-history.mg-custom-scrollbar
+    

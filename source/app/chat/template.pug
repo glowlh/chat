@@ -1,10 +1,20 @@
-.mg-chat.mg-container
-  .mg-chat__header.mg-header
+mixin icon(name, mods, title)
+  - mods = mods || ''
+  svg(class="icon icon-" + name class=mods)
+    if (title)
+      title.icon__title=title
+    use(xlink:href="/assets/sprite/sprite.svg#" + name)
 
-  .mg-chat__history.mg-history.mg-custom-scrollbar
+.mg-app__chat.mg-page
+  .mg-chat.mg-container
+    .mg-chat__header.mg-header
+      button.mg-header__back.mg-button(data-navigation-type='back')
+        +icon('back', ['icon-30', 'icon-light'], 'back')
+      .mg-header__manage
 
-  .mg-chat__panel.mg-panel
-    textarea(placeholder='Type your message...').mg-panel__textarea.mg-textarea.mg-custom-scrollbar
-    button.mg-button.mg-button--type--send.mg-panel__send
-      svg(class="icon icon-send icon-light icon-30")
-        title.icon__title send
+    .mg-chat__history.mg-history.mg-custom-scrollbar
+
+    .mg-chat__panel.mg-panel
+      textarea(placeholder='Type your message...').mg-panel__textarea.mg-textarea.mg-custom-scrollbar
+      button.mg-button.mg-button--type--send.mg-panel__send
+        +icon('send', ['icon-30', 'icon-light'], 'send')

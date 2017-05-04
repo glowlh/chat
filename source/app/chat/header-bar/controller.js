@@ -58,19 +58,18 @@ class HeaderBar {
   }
 
   /**
+   * Clears event listeners handlers
+   */
+  removeListener() {
+    this.rootEl.removeEventListener('click', this._actionHandler);
+  }
+
+  /**
    * Attaches events listener
    * @private
    */
   _attachListener() {
     this.rootEl.addEventListener('click', this._actionHandler, false);
-  }
-
-  /**
-   * Clears event listeners handlers
-   * @private
-   */
-  _clearListener() {
-    this.rootEl.removeEventListener('click', this._actionHandler);
   }
 
   /**
@@ -101,14 +100,11 @@ class HeaderBar {
   }
 
   /**
-   * Closes active chat
+   * Opens chat list
    * @private
    */
   _actionBack() {
-    this._clearListener();
-
     router.go('chat-list');
-    chatList.attachListener();
   }
 
   /**

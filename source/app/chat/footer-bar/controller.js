@@ -20,6 +20,8 @@ class FooterBar {
     this.textarea = this.rootEl.querySelector(SELECTOR_TEXTAREA);
     this.sendBtn = this.rootEl.querySelector(SELECTOR_SEND_BUTTON);
 
+    this._sendMessageHandler = this._sendMessageHandler.bind(this);
+
     this._attachListener();
   }
 
@@ -36,6 +38,14 @@ class FooterBar {
   }
 
   /**
+   * Clears event listeners handlers
+   */
+  destroy() {
+    this.sendBtn.removeEventListener('click', this._sendMessageHandler);
+    document.removeEventListener('keyup', this._sendMessageHandler);
+  }
+
+  /**
    * Reads content in the textarea
    * @private
    */
@@ -48,8 +58,8 @@ class FooterBar {
    * @private
    */
   _attachListener() {
-    this.sendBtn.addEventListener('click', this._sendMessageHandler.bind(this), false);
-    document.addEventListener('keyup', this._sendMessageHandler.bind(this), false);
+    this.sendBtn.addEventListener('click', this._sendMessageHandler);
+    document.addEventListener('keyup', this._sendMessageHandler);
   }
 
   /**

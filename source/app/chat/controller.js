@@ -1,33 +1,39 @@
 import FooterBar from './footer-bar/controller';
 import History from './history/controller';
 
-const CLASS_HISTORY = 'mg-history';
 const CLASS_PANEL = 'mg-panel';
-const CLASS_ROOT = 'mg-app__chat';
 
 class Chat {
 
   /**
    * Opens chat page
    */
-  init(id) {
-    this.rootEl = document.querySelector(`.${CLASS_ROOT}`);
+  init(root, id) {
+    if (!(root instanceof HTMLElement)) {
+      throw new TypeError(`${root} is not an HTMLElement`);
+    }
+
     if (typeof id !== 'string') {
       throw new TypeError(`${id} is not a String`);
     }
+
     this.id = id;
+    this.rootEl = root;
 
     this._attachFooterBar();
     this._attachHistory();
+  }
+
+  destroy() {
+    this.history.destroy();
+    this.footerBar.destroy();
   }
 
   /**
    * Attaches element with messages history
    */
   _attachHistory() {
-    const element = this.rootEl.querySelector(`.${CLASS_HISTORY}`);
-
-    this.history = new History(element, this.id);
+    this.history = new History(this.rootEl, this.id);
   }
 
   /**
@@ -40,5 +46,4 @@ class Chat {
   }
 }
 
-const chat = new Chat();
-export default chat;
+export default Chat;

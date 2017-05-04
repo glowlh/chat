@@ -1,12 +1,10 @@
-import templateFn from './template.pug';
+import templateChatItFn from './template-chat-item.pug';
 
 import invokeApi from '../invoke-api/invoke-api';
 import chatTitlePrompt from './chat-title-prompt/controller';
-import chat from '../chat/controller';
 import router from '../router/router';
 
 const ATTR_DATA_CHAT = 'chatId';
-const CLASS_ROOT = 'mg-app__chat-list';
 const CLASS_CHAT = 'mg-chat-item';
 const CLASS_CHAT_LIST = 'mg-history';
 const CLASS_BUTTON_NEW_CHAT = 'mg-button--type--new-chat';
@@ -16,8 +14,12 @@ class ChatList {
   /**
    * Initialises main elements
    */
-  init() {
-    this.rootEl = document.querySelector(`.${CLASS_ROOT}`);
+  init(root) {
+    if (!(root instanceof HTMLElement)) {
+      throw new TypeError(`${root} is not an HTMLElement`);
+    }
+
+    this.rootEl = root;
     this.listEl = this.rootEl.querySelector(`.${CLASS_CHAT_LIST}`);
     this.invokeApi = invokeApi;
     this.chatTitlePrompt = chatTitlePrompt;
@@ -29,21 +31,22 @@ class ChatList {
   }
 
   /**
+   * Clears chat list events
+   * @private
+   */
+  destroy() {
+    this.rootEl.removeEventListener('click', this._actionChatHandler);
+    document.removeEventListener('chat.new', this._onAddChat);
+    this.listEl.innerHTML = '';
+  }
+
+  /**
    * Attaches event listeners
    * @private
    */
   attachListener() {
     this.rootEl.addEventListener('click', this._actionChatHandler, false);
     document.addEventListener('chat.new', this._onAddChat, false);
-  }
-
-  /**
-   * Clears chat list events
-   * @private
-   */
-  _clearListeners() {
-    this.rootEl.removeEventListener('click', this._actionChatHandler);
-    document.removeEventListener('chat.new', this._onAddChat);
   }
 
   /**
@@ -57,26 +60,15 @@ class ChatList {
     const creationChatBtn = target.closest(`.${CLASS_BUTTON_NEW_CHAT}`);
 
     if (chatNode) {
-      this._actionOpenChat(chatNode);
+      const id = chatNode.dataset[ATTR_DATA_CHAT];
+      const prop = { id };
+
+      router.go('chat', prop);
     }
 
     if (creationChatBtn) {
       this._actionCreateChat();
     }
-  }
-
-  /**
-   * Attaches action for opening chat page
-   * @param node
-   * @private
-   */
-  _actionOpenChat(node) {
-    const id = node.dataset[ATTR_DATA_CHAT];
-
-    router.go('chat');
-    chat.init(id);
-
-    this._clearListeners();
   }
 
   /**
@@ -117,12 +109,11 @@ class ChatList {
    */
   _addChat(data) {
     const element = document.createElement('div');
-    element.innerHTML = templateFn(data);
+    element.innerHTML = templateChatItFn(data);
     const chatNode = element.firstChild;
 
     this.listEl.appendChild(chatNode);
   }
 }
 
-const chatList = new ChatList();
-export default chatList;
+export default ChatList;
