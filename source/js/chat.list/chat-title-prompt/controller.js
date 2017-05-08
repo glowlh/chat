@@ -1,10 +1,6 @@
-import templateFn from './template.pug';
-
 import invokeApi from '../../invoke-api/invoke-api';
-
-const CLASS_INPUT_FIELD = 'mg-input-text';
-const CLASS_BUTTON_SUBMIT = 'mg-input-submit';
-const CLASS_BUTTON_CLOSE = 'mg-closer';
+import template from './template';
+import style from './style.scss';
 
 class ChatTitlePrompt {
 
@@ -30,14 +26,14 @@ class ChatTitlePrompt {
     this._deferred = deferred;
 
     const element = document.createElement('div');
-    element.innerHTML = templateFn();
-    this.container = element.firstChild;
-    this.closeBtn = this.container.querySelector(`.${CLASS_BUTTON_CLOSE}`);
+    element.innerHTML = template;
+    this.container = element.querySelector(`.${style.root}`);
+    this.closeBtn = this.container.querySelector(`.${style.closeButton}`);
 
     this.rootEl.appendChild(this.container);
     this._readForm();
     this._attachListener();
-  
+
     return this._deferred.promise;
   }
 
@@ -86,7 +82,7 @@ class ChatTitlePrompt {
   _okHandler(event) {
     event.preventDefault();
 
-    const title =  this.inputField.value.trim();
+    const title = this.inputField.value.trim();
     this._deferred.resolve(title);
   }
 
@@ -96,8 +92,8 @@ class ChatTitlePrompt {
    */
   _readForm() {
     this.form = this.container.querySelector('form');
-    this.inputField = this.form.querySelector(`.${CLASS_INPUT_FIELD}`);
-    this.submitBtn = this.form.querySelector(`.${CLASS_BUTTON_SUBMIT}`);
+    this.inputField = this.form.querySelector(`.${style.field}`);
+    this.submitBtn = this.form.querySelector(`.${style.submitButton}`);
   }
 
   /**
