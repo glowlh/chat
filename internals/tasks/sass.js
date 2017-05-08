@@ -6,7 +6,7 @@ module.exports = () => {
   };
 
   $.gulp.task('sass', () => {
-    return $.gulp.src('./source/style/app.scss')
+    return $.gulp.src('./source/style/old-app.scss')
       .pipe($.gp.if($.dev, $.gp.sourcemaps.init()))
       .pipe($.gp.sass(options)).on('error', $.gp.notify.onError({ title: 'Style' }))
       .pipe($.gp.autoprefixer({ browsers: $.config.autoprefixerConfig }))

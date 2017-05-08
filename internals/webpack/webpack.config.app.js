@@ -1,6 +1,7 @@
 'use strict';
 
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const path = require('path');
 
 const input = path.join(process.cwd(), './source/js/');
@@ -41,6 +42,21 @@ const config = {
       {
         test: /.pug$/,
         loader: 'pug-loader'
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          use: [{
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              localIdentName: '[local]-[hash:base64:5]',
+              camelCase: true,
+            },
+          }, {
+            loader: 'sass-loader',
+          }],
+        })
       }
     ]
   },
@@ -54,6 +70,8 @@ const config = {
     //   context: process.cwd(),
     //   manifest: require(`${process.cwd()}/temp/foundation-manifest.json`)
     // }),
+
+    new ExtractTextPlugin('../css/app.css'),
 
     new webpack.NoEmitOnErrorsPlugin(),
 
