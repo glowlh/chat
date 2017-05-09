@@ -16,7 +16,6 @@ class InvokeApi {
     event.data = data;
 
     document.dispatchEvent(event);
-    
     return promise;
   }
 
@@ -60,7 +59,7 @@ class InvokeApi {
 
     event.data = {
       ids,
-      chatId
+      chatId,
     };
     document.dispatchEvent(event);
 
@@ -78,7 +77,7 @@ class InvokeApi {
     const event = new Event('server.message.send');
     event.data = {
       chatId: id,
-      message
+      message,
     };
 
     document.dispatchEvent(event);

@@ -1,25 +1,21 @@
 import invokeApi from '../../invoke-api/invoke-api';
 
-const SELECTOR_TEXTAREA = '.mg-textarea';
-const SELECTOR_SEND_BUTTON = '.mg-panel__send';
+const CLASS_TEXTAREA = 'mg-textarea';
+const CLASS_SEND_BUTTON = 'mg-panel__send';
+const CLASS_PANEL = 'mg-panel';
 
 class FooterBar {
 
   /**
-   * @param {HTMLElement} element - parent node for editor block
+   * @param {Chat} owner
    */
-  constructor(element, id) {
-    if (!(element instanceof HTMLElement)) {
-      throw new TypeError(`${element} is not an HTMLElement`);
-    }
-
-    this.rootEl = element;
-    this.id = id;
+  constructor(owner) {
+    this.rootEl = owner.rootEl.querySelector(`.${CLASS_PANEL}`);
+    this.id = owner.id;
     this.message = {};
     this.invokeApi = invokeApi;
-    this.textarea = this.rootEl.querySelector(SELECTOR_TEXTAREA);
-    this.sendBtn = this.rootEl.querySelector(SELECTOR_SEND_BUTTON);
-
+    this.textarea = this.rootEl.querySelector(`.${CLASS_TEXTAREA}`);
+    this.sendBtn = this.rootEl.querySelector(`.${CLASS_SEND_BUTTON}`);
     this._sendMessageHandler = this._sendMessageHandler.bind(this);
 
     this._attachListener();
@@ -68,7 +64,7 @@ class FooterBar {
    * @private
    */
   _sendMessageHandler(event) {
-    if(event.type !== 'click' && event.which !== 13) {
+    if (event.type !== 'click' && event.which !== 13) {
       return;
     }
 

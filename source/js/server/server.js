@@ -87,7 +87,7 @@ class Server {
     const id = `${ID_NAME_CHAT_PREFIX}-${chatsSize}`;
     const data = {
       id,
-      title
+      title,
     };
 
     this.storeChat(data);
@@ -99,13 +99,8 @@ class Server {
    * @returns {Array}
    */
   getChats() {
-    let totalChats = this.restoreChats();
-    let chats = totalChats.map((it) => {
-      return {
-        id: it.id,
-        title: it.title
-      };
-    });
+    const totalChats = this.restoreChats();
+    const chats = totalChats.map(it => ({ id: it.id, title: it.title }));
 
     return chats;
   }
@@ -115,7 +110,7 @@ class Server {
    * @returns {Array<Object>}
    */
   getMessages(id) {
-    let totalMessages = this.restoreMessages(id);
+    const totalMessages = this.restoreMessages(id);
 
     return totalMessages;
   }
@@ -126,13 +121,9 @@ class Server {
    * @param {String} chatId
    */
   deleteMessages(ids, chatId) {
-    let totalMessages = this.restoreMessages(chatId);
+    const totalMessages = this.restoreMessages(chatId);
 
-    const updatedMessages = totalMessages.filter((item) => {
-      return !ids.some((id) => {
-        return id === item.id;
-      });
-    });
+    const updatedMessages = totalMessages.filter(item => !ids.some(id => id === item.id));
 
     this.storeMessages(chatId, updatedMessages);
 
@@ -145,14 +136,14 @@ class Server {
    * @param {String} chatId
    */
   sendMessage(message, chatId) {
-    let totalMessages = this.restoreMessages(chatId);
+    const totalMessages = this.restoreMessages(chatId);
     const messagesSize = totalMessages.length;
     const id = `${ID_NAME_MESSAGE_PREFIX}-${messagesSize}`;
     const date = new Date();
     const data = {
       id,
       message,
-      date
+      date,
     };
     totalMessages.push(data);
 
@@ -170,7 +161,7 @@ class Server {
 
     document.dispatchEvent(event);
   }
-  
+
   /**
    * Creates event for sending new message
    * @param {Object} data - message data
@@ -232,7 +223,7 @@ class Server {
    * @param {Object} chat
    */
   storeChat(chat) {
-    let chats = this.restoreChats();
+    const chats = this.restoreChats();
     chat.messages = [];
     chats.push(chat);
     const chatsJSON = JSON.stringify(chats);

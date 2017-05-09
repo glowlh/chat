@@ -1,6 +1,7 @@
 import templateFn from './template.pug';
 
-const MONTH_TITLES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const MONTH_TITLES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября',
+  'ноября', 'декабря'];
 
 class Message {
 
@@ -34,7 +35,7 @@ class Message {
     this.spec = {
       id: options.id,
       date,
-      text: options.message
+      text: options.message,
     };
 
     const element = document.createElement('div');

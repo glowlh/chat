@@ -2,26 +2,29 @@ import templateFn from './template.pug';
 
 import invokeApi from '../../invoke-api/invoke-api';
 import router from '../../router/router';
-import chatList from '../../chat.list/controller';
 
 const DATA_BUTTON_NAVIGATION_ATTR = 'navigationType';
 const CLASS_MANAGE_ITEM = 'mg-header__manage';
 const CLASS_BUTTON_ITEM = 'mg-button';
+const CLASS_HEADER = 'mg-header';
 
 class HeaderBar {
 
-  constructor(root, id) {
-    if (!(root instanceof HTMLElement)) {
-      throw new TypeError(`${root} is not an HTMLElement`);
-    }
-
-    this.rootEl = root;
+  constructor(owner) {
+    this.rootEl = owner.rootEl.querySelector(`.${CLASS_HEADER}`);
     this.manageEl = this.rootEl.querySelector(`.${CLASS_MANAGE_ITEM}`);
-    this.id = id;
+    this.id = owner.id;
     this.invokeApi = invokeApi;
 
     this._actionHandler = this._actionHandler.bind(this);
     this._attachListener();
+  }
+
+  /**
+   * Clears event listeners handlers
+   */
+  destroy() {
+    this.rootEl.removeEventListener('click', this._actionHandler);
   }
 
   /**
@@ -51,17 +54,10 @@ class HeaderBar {
    */
   open() {
     const data = {
-      count: this.selectedMessages.num
+      count: this.selectedMessages.num,
     };
 
     this.manageEl.innerHTML = templateFn(data);
-  }
-
-  /**
-   * Clears event listeners handlers
-   */
-  removeListener() {
-    this.rootEl.removeEventListener('click', this._actionHandler);
   }
 
   /**
@@ -104,7 +100,7 @@ class HeaderBar {
    * @private
    */
   _actionBack() {
-    router.go('chat-list');
+    router.back();
   }
 
   /**

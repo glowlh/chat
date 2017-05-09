@@ -1,3 +1,6 @@
+import State from './state';
+import History from '../history/history';
+
 const CLASS_ROOT = 'mg-app';
 
 class Router {
@@ -6,6 +9,7 @@ class Router {
     this._active = null;
     this._states = new Map();
     this._rootEl = document.querySelector(`.${CLASS_ROOT}`);
+    this.history = new History();
   }
 
   /**
@@ -30,9 +34,10 @@ class Router {
 
   /**
    * Stores state
-   * @param {State} state
+   * @param {Object} options
    */
-  setState(state) {
+  setState(options) {
+    const state = new State(options);
     this._states.set(state.name, state);
   }
 
@@ -43,7 +48,21 @@ class Router {
    */
   go(name, options = null) {
     const nextState = this._states.get(name);
+    this.history.pushPage(nextState, options);
+
     this.changeState(nextState, options);
+  }
+
+  /**
+   * Activates previous state
+   */
+  back() {
+    this.history.popPage();
+    const prevPage = this.history.active;
+    const state = prevPage.state;
+    const options = prevPage.options;
+
+    this.changeState(state, options);
   }
 
   /**

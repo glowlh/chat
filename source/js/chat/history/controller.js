@@ -1,30 +1,22 @@
 import invokeApi from '../../invoke-api/invoke-api';
-import HeaderBar from '../header-bar/controller';
 import SelectedMessages from './history.selected-messages';
 import Message from '../message/controller';
 
 const DATA_MESSAGE_ATTR = 'messageId';
 const CLASS_MESSAGE = 'mg-message';
-const CLASS_HEADER = 'mg-header';
 const CLASS_ROOT = 'mg-history';
 
 
 class History {
 
   /**
-   * @param {HTMLElement} element - parent node for history block
-   * @param {String} id
+   * @param {Chat} owner
    */
-  constructor(element, id) {
-    if (!(element instanceof HTMLElement)) {
-      throw new TypeError(`${element} is not an HTMLElement`);
-    }
+  constructor(owner) {
+    this.rootEl = owner.rootEl.querySelector(`.${CLASS_ROOT}`);
+    this.id = owner.id;
+    this.owner = owner;
 
-    this.rootEl = element.querySelector(`.${CLASS_ROOT}`);
-    this.id = id;
-
-    const header = element.querySelector(`.${CLASS_HEADER}`);
-    this.headerBar = new HeaderBar(header, this.id);
     this.selectedMessages = new SelectedMessages();
 
     this._toggleSelectedHandler = this._toggleSelectedHandler.bind(this);
@@ -55,7 +47,6 @@ class History {
     this.rootEl.removeEventListener('click', this._toggleSelectedHandler);
     document.removeEventListener('message.new', this._onAddMessage);
     document.removeEventListener('messages.delete', this._onRemoveMessages);
-    this.headerBar.removeListener();
     this.rootEl.innerHTML = '';
   }
 
@@ -160,7 +151,7 @@ class History {
     const message = this.messages.get(id);
     this.selectedMessages.toggle(message);
 
-    this.headerBar.setSelected(this.selectedMessages);
+    this.owner.setSelected(this.selectedMessages);
   }
 }
 

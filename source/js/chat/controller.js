@@ -1,9 +1,9 @@
+import BasePage from '../base-page/base-page';
 import FooterBar from './footer-bar/controller';
 import History from './history/controller';
+import HeaderBar from './header-bar/controller';
 
-const CLASS_PANEL = 'mg-panel';
-
-class Chat {
+class Chat extends BasePage {
 
   /**
    * Opens chat page
@@ -22,27 +22,41 @@ class Chat {
 
     this._attachFooterBar();
     this._attachHistory();
+    this._attachHeaderBar();
   }
 
   destroy() {
     this.history.destroy();
     this.footerBar.destroy();
+    this.headerBar.destroy();
+  }
+
+  /**
+   * @param {SelectedMessages} messages
+   */
+  setSelected(messages) {
+    this.headerBar.setSelected(messages);
   }
 
   /**
    * Attaches element with messages history
    */
   _attachHistory() {
-    this.history = new History(this.rootEl, this.id);
+    this.history = new History(this);
   }
 
   /**
    * Attaches element footer bar
    */
   _attachFooterBar() {
-    const element = this.rootEl.querySelector(`.${CLASS_PANEL}`);
+    this.footerBar = new FooterBar(this);
+  }
 
-    this.footerBar = new FooterBar(element, this.id);
+  /**
+   * Attaches element header bar
+   */
+  _attachHeaderBar() {
+    this.headerBar = new HeaderBar(this);
   }
 }
 

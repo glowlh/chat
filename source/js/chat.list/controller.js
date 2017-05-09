@@ -1,5 +1,6 @@
 import templateChatItFn from './template-chat-item.pug';
 
+import BasePage from '../base-page/base-page';
 import invokeApi from '../invoke-api/invoke-api';
 import chatTitlePrompt from './chat-title-prompt/controller';
 import router from '../router/router';
@@ -9,7 +10,7 @@ const CLASS_CHAT = 'mg-chat-item';
 const CLASS_CHAT_LIST = 'mg-history';
 const CLASS_BUTTON_NEW_CHAT = 'mg-button--type--new-chat';
 
-class ChatList {
+class ChatList extends BasePage {
 
   /**
    * Initialises main elements

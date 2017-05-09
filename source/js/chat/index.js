@@ -3,6 +3,6 @@ import templateFn from './template.pug';
 
 const options = {
   id: 'chat',
-  template: templateFn()
+  template: templateFn(),
 };
 TemplateProvider.register(options);
