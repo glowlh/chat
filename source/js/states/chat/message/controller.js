@@ -1,4 +1,5 @@
-import templateFn from './template.pug';
+import templateFn from './template';
+import style from './style.scss';
 
 const MONTH_TITLES = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября',
   'ноября', 'декабря'];
@@ -40,7 +41,7 @@ class Message {
 
     const element = document.createElement('div');
     element.innerHTML = templateFn(this.spec);
-    this.node = element.firstChild;
+    this.node = element.querySelector(`.${style.message}`);
   }
 
   /**

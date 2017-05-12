@@ -1,11 +1,10 @@
-import invokeApi from '../../invoke-api/invoke-api';
+import invokeApi from '../../../invoke-api/invoke-api';
 import SelectedMessages from './history.selected-messages';
 import Message from '../message/controller';
+import messageStyle from '../message/style.scss';
+import style from '../style.scss';
 
 const DATA_MESSAGE_ATTR = 'messageId';
-const CLASS_MESSAGE = 'mg-message';
-const CLASS_ROOT = 'mg-history';
-
 
 class History {
 
@@ -13,7 +12,7 @@ class History {
    * @param {Chat} owner
    */
   constructor(owner) {
-    this.rootEl = owner.rootEl.querySelector(`.${CLASS_ROOT}`);
+    this.rootEl = owner.rootEl.querySelector(`.${style.history}`);
     this.id = owner.id;
     this.owner = owner;
 
@@ -141,7 +140,7 @@ class History {
    */
   _toggleSelectedHandler(event) {
     const target = event.target;
-    const messageNode = target.closest(`.${CLASS_MESSAGE}`);
+    const messageNode = target.closest(`.${messageStyle.message}`);
 
     if (!messageNode) {
       return;
@@ -151,7 +150,7 @@ class History {
     const message = this.messages.get(id);
     this.selectedMessages.toggle(message);
 
-    this.owner.setSelected(this.selectedMessages);
+    this.owner.select(this.selectedMessages);
   }
 }
 

@@ -1,7 +1,7 @@
 import './template';
 import router from './router/router';
-import ChatList from './chat.list/controller';
-import Chat from './chat/controller';
+import ChatList from './states/chat.list/controller';
+import Chat from './states/chat/controller';
 
 const chatListProp = {
   name: 'chat-list',

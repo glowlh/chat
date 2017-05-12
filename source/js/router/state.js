@@ -1,5 +1,7 @@
 import templateCollection from '../template/template.collection';
 
+const CLASS_ROOT = 'mg-page';
+
 class State {
 
   constructor(options) {
@@ -16,14 +18,14 @@ class State {
    * Creates state instance
    */
   open(options) {
-    this._init();
+    this._defineElement();
     const id = options ? options.id : null;
     this.instance = new this.Controller();
     this.instance.init(this.element, id);
   }
 
   /**
-   * Deletes state instance
+   * Closes state instance
    */
   close() {
     this.instance.destroy();
@@ -31,13 +33,13 @@ class State {
   }
 
   /**
-   * Initialises dom node for state
+   * Defines state element
    * @private
    */
-  _init() {
+  _defineElement() {
     const node = document.createElement('div');
     node.innerHTML = this.template;
-    this.element = node.firstChild;
+    this.element = node.querySelector(`.${CLASS_ROOT}`);
   }
 }
 

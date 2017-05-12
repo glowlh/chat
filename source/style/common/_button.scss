@@ -8,12 +8,3 @@
     transition: 0.4s;
   }
 }
-
-.#{$app}-button--type--send {
-  height: 30px;
-  width: 30px;
-
-  .icon:hover {
-    fill: rgba(#fff, 0.5);
-  }
-}

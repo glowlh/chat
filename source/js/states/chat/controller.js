@@ -1,4 +1,4 @@
-import BasePage from '../base-page/base-page';
+import BasePage from '../base-page';
 import FooterBar from './footer-bar/controller';
 import History from './history/controller';
 import HeaderBar from './header-bar/controller';
@@ -20,43 +20,30 @@ class Chat extends BasePage {
     this.id = id;
     this.rootEl = root;
 
-    this._attachFooterBar();
-    this._attachHistory();
-    this._attachHeaderBar();
+    this._defineComponents();
   }
 
   destroy() {
     this.history.destroy();
-    this.footerBar.destroy();
-    this.headerBar.destroy();
+    this.footer.destroy();
+    this.header.destroy();
   }
 
   /**
    * @param {SelectedMessages} messages
    */
-  setSelected(messages) {
-    this.headerBar.setSelected(messages);
+  select(messages) {
+    this.header.setSelected(messages);
   }
 
   /**
-   * Attaches element with messages history
+   * Defines history, footer and header instances
+   * @private
    */
-  _attachHistory() {
+  _defineComponents() {
     this.history = new History(this);
-  }
-
-  /**
-   * Attaches element footer bar
-   */
-  _attachFooterBar() {
-    this.footerBar = new FooterBar(this);
-  }
-
-  /**
-   * Attaches element header bar
-   */
-  _attachHeaderBar() {
-    this.headerBar = new HeaderBar(this);
+    this.footer = new FooterBar(this);
+    this.header = new HeaderBar(this);
   }
 }
 

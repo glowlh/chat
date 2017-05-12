@@ -122,11 +122,9 @@ class Server {
    */
   deleteMessages(ids, chatId) {
     const totalMessages = this.restoreMessages(chatId);
-
     const updatedMessages = totalMessages.filter(item => !ids.some(id => id === item.id));
 
     this.storeMessages(chatId, updatedMessages);
-
     this.createDeletingEvent(ids);
   }
 

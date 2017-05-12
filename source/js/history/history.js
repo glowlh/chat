@@ -2,38 +2,44 @@ class History {
 
   constructor() {
     this._store = [];
-    this._active = null;
+    this._last = null;
   }
 
   /**
    * Returns active page
    * @returns {{state: State, options: Object}|*|null}
    */
-  get active() {
-    return this._active;
+  get last() {
+    return this._last;
   }
 
   /**
    * Saves last page in the store
    * @param {State} state
-   * @param {Object} options - state options
+   * @param {Object | null} options - state options
+   * @param {String} options.id - chat state id
    */
-  pushPage(state, options) {
+  pushState(state, options) {
     const page = {
       state,
       options,
     };
+    
+    if (this._last === page) {
+      return;
+    }
+    
     this._store.push(page);
-    this._active = page;
+    this._last = page;
   }
 
   /**
    * Removes last page from the store
    */
-  popPage() {
+  popState() {
     this._store.pop();
     const lastIndex = this._store.length - 1;
-    this._active = this._store[lastIndex];
+    this._last = this._store[lastIndex];
   }
 }
 

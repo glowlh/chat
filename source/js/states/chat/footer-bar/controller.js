@@ -1,8 +1,9 @@
-import invokeApi from '../../invoke-api/invoke-api';
+import invokeApi from '../../../invoke-api/invoke-api';
+import template from './template';
+import style from './style.scss';
+import chatStyle from '../style.scss';
 
-const CLASS_TEXTAREA = 'mg-textarea';
-const CLASS_SEND_BUTTON = 'mg-panel__send';
-const CLASS_PANEL = 'mg-panel';
+const KEY_CODE_ENTER = 13;
 
 class FooterBar {
 
@@ -10,12 +11,14 @@ class FooterBar {
    * @param {Chat} owner
    */
   constructor(owner) {
-    this.rootEl = owner.rootEl.querySelector(`.${CLASS_PANEL}`);
+    this.rootEl = owner.rootEl.querySelector(`.${chatStyle.panel}`);
+    this.rootEl.innerHTML = template;
+
     this.id = owner.id;
     this.message = {};
     this.invokeApi = invokeApi;
-    this.textarea = this.rootEl.querySelector(`.${CLASS_TEXTAREA}`);
-    this.sendBtn = this.rootEl.querySelector(`.${CLASS_SEND_BUTTON}`);
+    this.textarea = this.rootEl.querySelector(`.${style.textarea}`);
+    this.sendBtn = this.rootEl.querySelector(`.${style.buttonSend}`);
     this._sendMessageHandler = this._sendMessageHandler.bind(this);
 
     this._attachListener();
@@ -64,7 +67,7 @@ class FooterBar {
    * @private
    */
   _sendMessageHandler(event) {
-    if (event.type !== 'click' && event.which !== 13) {
+    if (event.type !== 'click' && event.which !== KEY_CODE_ENTER) {
       return;
     }
 

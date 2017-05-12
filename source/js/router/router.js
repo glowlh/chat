@@ -24,17 +24,19 @@ class Router {
 
     if (this._active) {
       this._active.close();
-      this._removePage(this._active);
+      this._removeState(this._active);
     }
 
     state.open(options);
-    this._addPage(state);
+    this._addState(state);
     this._active = state;
   }
 
   /**
    * Stores state
    * @param {Object} options
+   * @param {String} options.name - state name
+   * @param {Chat | ChatList} options.controller - state controller
    */
   setState(options) {
     const state = new State(options);
@@ -48,7 +50,7 @@ class Router {
    */
   go(name, options = null) {
     const nextState = this._states.get(name);
-    this.history.pushPage(nextState, options);
+    this.history.pushState(nextState, options);
 
     this.changeState(nextState, options);
   }
@@ -57,10 +59,10 @@ class Router {
    * Activates previous state
    */
   back() {
-    this.history.popPage();
-    const prevPage = this.history.active;
-    const state = prevPage.state;
-    const options = prevPage.options;
+    this.history.popState();
+    const prevState = this.history.last;
+    const state = prevState.state;
+    const options = prevState.options;
 
     this.changeState(state, options);
   }
@@ -69,7 +71,7 @@ class Router {
    * @param {State} state
    * @private
    */
-  _addPage(state) {
+  _addState(state) {
     const element = state.element;
     this._rootEl.appendChild(element);
   }
@@ -78,7 +80,7 @@ class Router {
    * @param {State} state
    * @private
    */
-  _removePage(state) {
+  _removeState(state) {
     const element = state.element;
     this._rootEl.removeChild(element);
   }

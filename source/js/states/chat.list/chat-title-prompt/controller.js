@@ -1,4 +1,4 @@
-import invokeApi from '../../invoke-api/invoke-api';
+import invokeApi from '../../../invoke-api/invoke-api';
 import template from './template';
 import style from './style.scss';
 

@@ -1,0 +1,21 @@
+@import '../../../../style/utils/variables';
+
+.message {
+  padding: 15px 10px;
+  background: rgba($color-background-message, 0.4);
+  position: relative;
+  margin: 20px;
+}
+
+.content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.date {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  color: $color-mint-dark;
+  font-size: 12px;
+}

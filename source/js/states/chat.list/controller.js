@@ -1,14 +1,13 @@
-import templateChatItFn from './template-chat-item.pug';
+import templateChatItFn from './chat-item/template';
+import chatItStyle from './chat-item/style.scss';
+import style from './style.scss';
 
-import BasePage from '../base-page/base-page';
-import invokeApi from '../invoke-api/invoke-api';
+import BasePage from '../base-page';
+import invokeApi from '../../invoke-api/invoke-api';
 import chatTitlePrompt from './chat-title-prompt/controller';
-import router from '../router/router';
+import router from '../../router/router';
 
 const ATTR_DATA_CHAT = 'chatId';
-const CLASS_CHAT = 'mg-chat-item';
-const CLASS_CHAT_LIST = 'mg-history';
-const CLASS_BUTTON_NEW_CHAT = 'mg-button--type--new-chat';
 
 class ChatList extends BasePage {
 
@@ -21,7 +20,7 @@ class ChatList extends BasePage {
     }
 
     this.rootEl = root;
-    this.listEl = this.rootEl.querySelector(`.${CLASS_CHAT_LIST}`);
+    this.listEl = this.rootEl.querySelector(`.${style.history}`);
     this.invokeApi = invokeApi;
     this.chatTitlePrompt = chatTitlePrompt;
     this._actionChatHandler = this._actionChatHandler.bind(this);
@@ -57,8 +56,8 @@ class ChatList extends BasePage {
    */
   _actionChatHandler(event) {
     const target = event.target;
-    const chatNode = target.closest(`.${CLASS_CHAT}`);
-    const creationChatBtn = target.closest(`.${CLASS_BUTTON_NEW_CHAT}`);
+    const chatNode = target.closest(`.${chatItStyle.chatItem}`);
+    const creationChatBtn = target.closest(`.${style.buttonCreateChat}`);
 
     if (chatNode) {
       const id = chatNode.dataset[ATTR_DATA_CHAT];
@@ -111,7 +110,7 @@ class ChatList extends BasePage {
   _addChat(data) {
     const element = document.createElement('div');
     element.innerHTML = templateChatItFn(data);
-    const chatNode = element.firstChild;
+    const chatNode = element.querySelector(`.${chatItStyle.chatItem}`);
 
     this.listEl.appendChild(chatNode);
   }

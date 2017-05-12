@@ -1,0 +1,14 @@
+@import '../../../../style/utils/variables';
+
+.chat-item {
+  padding: 15px 10px;
+  background: rgba($color-background-message, 0.4);
+  margin: 20px;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}

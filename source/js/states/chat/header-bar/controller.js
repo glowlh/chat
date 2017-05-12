@@ -1,18 +1,17 @@
-import templateFn from './template.pug';
+import templateFn from './template';
+import style from '../style.scss';
 
-import invokeApi from '../../invoke-api/invoke-api';
-import router from '../../router/router';
+import invokeApi from '../../../invoke-api/invoke-api';
+import router from '../../../router/router';
 
 const DATA_BUTTON_NAVIGATION_ATTR = 'navigationType';
-const CLASS_MANAGE_ITEM = 'mg-header__manage';
 const CLASS_BUTTON_ITEM = 'mg-button';
-const CLASS_HEADER = 'mg-header';
 
 class HeaderBar {
 
   constructor(owner) {
-    this.rootEl = owner.rootEl.querySelector(`.${CLASS_HEADER}`);
-    this.manageEl = this.rootEl.querySelector(`.${CLASS_MANAGE_ITEM}`);
+    this.rootEl = owner.rootEl.querySelector(`.${style.header}`);
+    this.manageEl = this.rootEl.querySelector(`.${style.manage}`);
     this.id = owner.id;
     this.invokeApi = invokeApi;
 

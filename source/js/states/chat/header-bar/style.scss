@@ -1,0 +1,19 @@
+@import '../../../../style/utils/variables';
+
+.button-delete {
+  padding: 5px 10px;
+  color: $color-text-white;
+  display: inline-flex;
+  font-size: 14px;
+  cursor: pointer;
+  background: $color-mint;
+}
+
+.button-cancel {
+  padding: 5px 10px;
+  color: $color-text-white;
+  display: inline-flex;
+  font-size: 14px;
+  cursor: pointer;
+  background: $color-sand;
+}

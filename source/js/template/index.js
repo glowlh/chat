@@ -1,3 +1,3 @@
 import './template.provider';
-import '../chat.list';
-import '../chat';
+import '../states/chat.list';
+import '../states/chat';
