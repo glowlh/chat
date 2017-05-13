@@ -2,6 +2,9 @@
   "name": "builder",
   "version": "1.0.0",
   "author": "a.kalin",
+  "scripts": {
+    "lint": "eslint source/js/**/*.js"
+  },
   "devDependencies": {
     "babel-core": "6.24.1",
     "babel-loader": "7.0.0",

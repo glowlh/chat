@@ -24,11 +24,11 @@ class History {
       state,
       options,
     };
-    
+
     if (this._last === page) {
       return;
     }
-    
+
     this._store.push(page);
     this._last = page;
   }
