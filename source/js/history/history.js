@@ -1,45 +1,43 @@
 class History {
 
   constructor() {
-    this._store = [];
-    this._last = null;
+    this._items = [];
   }
 
   /**
-   * Returns active page
-   * @returns {{state: State, options: Object}|*|null}
+   * @typedef {Object} Item
+   * @property {State} state
+   * @property {Object} options
+   *
+   * @returns {Item}
    */
-  get last() {
-    return this._last;
+  get current() {
+    const index = this._items.length - 1;
+    return this._items[index];
   }
 
   /**
-   * Saves last page in the store
+   * @typedef {Object} Options
+   * @property {string} id - chat id
+   *
    * @param {State} state
-   * @param {Object | null} options - state options
-   * @param {String} options.id - chat state id
+   * @param {Options} options - state options
    */
   pushState(state, options) {
-    const page = {
+    const item = {
       state,
       options,
     };
 
-    if (this._last === page) {
+    if (this.current === item) {
       return;
     }
 
-    this._store.push(page);
-    this._last = page;
+    this._items.push(item);
   }
 
-  /**
-   * Removes last page from the store
-   */
   popState() {
-    this._store.pop();
-    const lastIndex = this._store.length - 1;
-    this._last = this._store[lastIndex];
+    this._items.pop();
   }
 }
 

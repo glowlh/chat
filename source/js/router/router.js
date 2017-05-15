@@ -1,3 +1,8 @@
+/**
+ * @typedef {Object} ControllerOptions
+ * @property {string} id - chat id
+ */
+
 import State from './state';
 import History from '../history/history';
 
@@ -13,9 +18,9 @@ class Router {
   }
 
   /**
-   * Changes active state
+   * Changes current state
    * @param {State} state
-   * @param {Object} options
+   * @param {ControllerOptions} options
    */
   changeState(state, options) {
     if (this._active === state) {
@@ -24,19 +29,21 @@ class Router {
 
     if (this._active) {
       this._active.close();
-      this._removeState(this._active);
+      this._removeStateView(this._active);
     }
 
     state.open(options);
-    this._addState(state);
+    this._addStateView(state);
     this._active = state;
   }
 
   /**
+   * @typedef {Object} StateOptions
+   * @property {string} name
+   * @property {function} controller
+   *
    * Stores state
-   * @param {Object} options
-   * @param {String} options.name - state name
-   * @param {Chat | ChatList} options.controller - state controller
+   * @param {StateOptions} options
    */
   setState(options) {
     const state = new State(options);
@@ -44,9 +51,8 @@ class Router {
   }
 
   /**
-   * Sets active state
    * @param {String} name - state name
-   * @param {Object} options
+   * @param {ControllerOptions} options
    */
   go(name, options = null) {
     const nextState = this._states.get(name);
@@ -55,14 +61,11 @@ class Router {
     this.changeState(nextState, options);
   }
 
-  /**
-   * Activates previous state
-   */
-  back() {
+  goBack() {
     this.history.popState();
-    const prevState = this.history.last;
-    const state = prevState.state;
-    const options = prevState.options;
+    const itemHistory = this.history.current;
+    const state = itemHistory.state;
+    const options = itemHistory.options;
 
     this.changeState(state, options);
   }
@@ -71,7 +74,7 @@ class Router {
    * @param {State} state
    * @private
    */
-  _addState(state) {
+  _addStateView(state) {
     const element = state.element;
     this._rootEl.appendChild(element);
   }
@@ -80,7 +83,7 @@ class Router {
    * @param {State} state
    * @private
    */
-  _removeState(state) {
+  _removeStateView(state) {
     const element = state.element;
     this._rootEl.removeChild(element);
   }

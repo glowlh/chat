@@ -87,7 +87,7 @@ class HeaderBar {
       case 'cancel':
         this._actionCancel();
         break;
-      case 'back':
+      case 'goBack':
         this._actionBack();
         break;
       default: break;
@@ -99,7 +99,7 @@ class HeaderBar {
    * @private
    */
   _actionBack() {
-    router.back();
+    router.goBack();
   }
 
   /**
