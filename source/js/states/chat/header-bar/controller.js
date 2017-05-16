@@ -87,7 +87,7 @@ class HeaderBar {
       case 'cancel':
         this._actionCancel();
         break;
-      case 'goBack':
+      case 'back':
         this._actionBack();
         break;
       default: break;
