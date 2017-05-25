@@ -3,7 +3,7 @@
 module.exports = [
   './internals/tasks/sass.js',
   './internals/tasks/server.js',
-  './internals/tasks/pug.js',
+  './internals/tasks/html.js',
   './internals/tasks/watch.js',
   './internals/tasks/clean.js',
   './internals/tasks/js.lint.js',

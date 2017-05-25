@@ -31,7 +31,7 @@ $.gulp.task('default', $.gulp.series(
   // 'webpack:dll',
   $.gulp.parallel(
     'sass',
-    'pug',
+    'html',
     'webpack:app',
     'copy:fonts',
     'copy:images',
@@ -49,7 +49,7 @@ $.gulp.task('build', $.gulp.series(
   'webpack:dll',
   $.gulp.parallel(
     'sass',
-    'pug',
+    'html',
     'webpack:app',
     'copy:fonts',
     'sprite:svg'

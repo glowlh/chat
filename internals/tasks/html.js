@@ -3,16 +3,11 @@
 module.exports = () => {
   const patterns = [];
 
-  $.gulp.task('pug', () => {
+  $.gulp.task('html', () => {
     patterns.push({ match: '%=suffix=%', replace: $.dev ? '' : '.min' });
     patterns.push({ match: '%=version=%', replace: $.dev ? '' : `?rel=${$.package.version}` });
 
-    return $.gulp.src('./source/template/pages/**.pug')
-      .pipe($.gp.pug({ pretty: true }))
-      .on('error', $.gp.notify.onError(error => ({
-        title: 'Pug',
-        message: error.message
-      })))
+    return $.gulp.src('./source/index.html')
       .pipe($.gp.replaceTask({ patterns, usePrefix: false }))
       .pipe($.gulp.dest($.config.output));
   });
