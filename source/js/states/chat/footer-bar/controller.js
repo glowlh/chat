@@ -2,6 +2,7 @@ import invokeApi from '../../../invoke-api/invoke-api';
 import template from './template';
 import style from './style.scss';
 import chatStyle from '../style.scss';
+import NodeParser from '../node-parser/controller';
 
 const KEY_CODE_ENTER = 13;
 
@@ -33,7 +34,7 @@ class FooterBar {
     }
 
     this.content = '';
-    this.textarea.value = '';
+    this.textarea.innerHTML = '';
   }
 
   /**
@@ -41,7 +42,6 @@ class FooterBar {
    */
   destroy() {
     this.sendBtn.removeEventListener('click', this._sendMessageHandler);
-    document.removeEventListener('keyup', this._sendMessageHandler);
   }
 
   /**
@@ -49,7 +49,21 @@ class FooterBar {
    * @private
    */
   _read() {
-    this.content = this.textarea.value;
+    const content = this.textarea.innerHTML;
+    const node = this._createNode(content);
+    const parser = new NodeParser();
+    this.content = parser.parse(node);
+  }
+
+  /**
+   * Creates wrapper node
+   * @param {string} content
+   * @private
+   */
+  _createNode(content) {
+    const node = document.createElement('div');
+    node.innerHTML = content;
+    return node;
   }
 
   /**
@@ -58,7 +72,6 @@ class FooterBar {
    */
   _attachListener() {
     this.sendBtn.addEventListener('click', this._sendMessageHandler);
-    document.addEventListener('keyup', this._sendMessageHandler);
   }
 
   /**

@@ -10,6 +10,7 @@
   border: none;
   background: rgba($color-background-message, 0.4);
   color: rgba($color-text-base, 0.7);
+  overflow: auto;
 
   &::-webkit-input-placeholder {
     color: rgba($color-text-base, 0.7);

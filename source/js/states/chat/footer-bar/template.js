@@ -11,9 +11,10 @@ const sendIcon = `
 `;
 
 const template = `
-  <textarea 
+  <div 
     class="${style.textarea} mg-custom-scrollbar" 
-    placeholder="Type your message..."></textarea>
+    placeholder="Type your message..."
+    contenteditable="true"></div>
   <button class="${style.buttonSend} mg-button">
     ${sendIcon}
   </button>
